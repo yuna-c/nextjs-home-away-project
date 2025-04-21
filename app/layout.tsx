@@ -1,4 +1,5 @@
 import './globals.css'
+import Providers from './providers'
 import Navbar from '@/components/navbar/Navbar'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -19,10 +20,13 @@ export default function RootLayout({
     <html
       lang='en'
       suppressHydrationWarning
+      // CSR과 SSR 간의 콘텐츠 불일치 경고를 무시
     >
       <body className={inter.className}>
-        <Navbar />
-        <main className='container py-10'>{children}</main>
+        <Providers>
+          <Navbar />
+          <main className='container py-10'>{children}</main>
+        </Providers>
       </body>
     </html>
   )
