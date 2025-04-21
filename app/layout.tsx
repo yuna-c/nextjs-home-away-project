@@ -1,4 +1,5 @@
 import './globals.css'
+import Navbar from '@/components/navbar/Navbar'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
@@ -19,7 +20,10 @@ export default function RootLayout({
       lang='en'
       suppressHydrationWarning
     >
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Navbar />
+        <main className='container py-10'>{children}</main>
+      </body>
     </html>
   )
 }
