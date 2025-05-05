@@ -3,11 +3,6 @@
 import { profileSchema } from './schemas'
 
 export const createProfileAction = async (prevState: any, formData: FormData) => {
-  // const firstName = formData.get('firstName') as string
-  // console.log(firstName)
-  // if (firstName !== 'shakeAndBake') return { message: 'There was an error...' }
-  // return { message: 'Profile Created' }
-
   try {
     const rawData = Object.fromEntries(formData)
     const validatedFields = profileSchema.parse(rawData)
