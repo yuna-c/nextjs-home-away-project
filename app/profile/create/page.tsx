@@ -1,6 +1,6 @@
 import FormContainer from '@/components/form/FormContainer'
+import FormInput from '@/components/form/FormInput'
 import { SubmitButton } from '@/components/form/SubmitButton'
-import FormInput from '@/components/form/formInput'
 import { createProfileAction } from '@/utils/actions'
 
 function CreateProfilePage() {
@@ -24,7 +24,7 @@ function CreateProfilePage() {
             />
             <FormInput
               type='text'
-              name='userName'
+              name='username'
               label='User Name'
             />
           </div>
