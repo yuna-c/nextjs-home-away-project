@@ -7,7 +7,7 @@ async function UserIcon() {
     return (
       <img
         src={profileImage}
-        className='h-6 w-6 rounded-full object-cover'
+        className='h-4 w-4 rounded-full object-cover'
       />
     )
   }
