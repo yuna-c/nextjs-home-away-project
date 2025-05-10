@@ -1,7 +1,7 @@
 'use server'
 
 import db from './db'
-import { profileSchema, validateWithZodSchema } from './schemas'
+import { imageSchema, profileSchema, validateWithZodSchema } from './schemas'
 import { auth, clerkClient, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -98,6 +98,10 @@ export const updateProfileAction = async (prevState: any, formData: FormData): P
   }
 }
 
+// 프로필 이미지 수정 액션 정의
 export const updateProfileImageAction = async (prevState: any, formData: FormData): Promise<{ message: string }> => {
+  const image = formData.get('image') as File
+  const validatedFiles = validateWithZodSchema(imageSchema, { image })
+  console.log(validatedFiles)
   return { message: 'profile image updated successfully' }
 }
