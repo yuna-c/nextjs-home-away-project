@@ -13,3 +13,13 @@ export const profileSchema = z.object({
     message: 'username must be at least 2 characters'
   })
 })
+
+export function validateWithZodSchema<T>(schema: ZodSchema<T>, data: unknown) {
+  const result = schema.safeParse(data)
+  console.log(result)
+  if (!result.success) {
+    const errors = result.error.errors.map((error) => error.message)
+    throw new Error(errors.join(','))
+  }
+  return result.data
+}
