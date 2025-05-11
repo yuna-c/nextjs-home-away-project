@@ -21,7 +21,7 @@ function LinksDropdown() {
           variant='outline'
           className='flex max-w-[100px] gap-4'
         >
-          <LuAlignLeft className='h-6 w-6' />
+          <LuAlignLeft className='!h-6 !w-6' />
           <UserIcon />
         </Button>
       </DropdownMenuTrigger>

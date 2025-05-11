@@ -9,7 +9,7 @@ function Logo() {
       asChild
     >
       <Link href='/'>
-        <LuTent className='h-6 w-6' />
+        <LuTent className='!h-6 !w-6' />
       </Link>
     </Button>
   )

@@ -2,6 +2,7 @@
 
 import db from './db'
 import { imageSchema, profileSchema, validateWithZodSchema } from './schemas'
+import { uploadImage } from './supabase'
 import { auth, clerkClient, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -9,6 +10,7 @@ import { redirect } from 'next/navigation'
 // 인증된 유저 확인 로직 준비
 const getAuthUser = async () => {
   const user = await currentUser()
+
   if (!user) {
     if (!user) throw new Error('You must be logged in to access this route')
   }
@@ -17,7 +19,7 @@ const getAuthUser = async () => {
 }
 
 const renderError = (error: unknown): { message: string } => {
-  console.log(error)
+  // console.log(error)
   return { message: error instanceof Error ? error.message : 'An error occurred' }
 }
 
@@ -29,7 +31,7 @@ export const createProfileAction = async (prevState: any, formData: FormData) =>
 
     const rawData = Object.fromEntries(formData)
     const validatedFields = validateWithZodSchema(profileSchema, rawData)
-    console.log(validatedFields)
+    // console.log(validatedFields)
 
     await db.profile.create({
       data: {
@@ -68,6 +70,7 @@ export const fetchProfileImage = async () => {
 // DB에서 현재 유저 프로필을 정확히 찾아오는 함수
 export const fetchProfile = async () => {
   const user = await getAuthUser()
+
   const profile = await db.profile.findUnique({
     where: {
       clerkId: user.id
@@ -100,8 +103,26 @@ export const updateProfileAction = async (prevState: any, formData: FormData): P
 
 // 프로필 이미지 수정 액션 정의
 export const updateProfileImageAction = async (prevState: any, formData: FormData): Promise<{ message: string }> => {
-  const image = formData.get('image') as File
-  const validatedFiles = validateWithZodSchema(imageSchema, { image })
-  console.log(validatedFiles)
-  return { message: 'profile image updated successfully' }
+  const user = await getAuthUser()
+
+  try {
+    const image = formData.get('image') as File
+    const validatedFiles = validateWithZodSchema(imageSchema, { image })
+    // console.log(validatedFiles)
+    const fullPath = await uploadImage(validatedFiles.image)
+
+    await db.profile.update({
+      where: {
+        clerkId: user.id
+      },
+      data: {
+        profileImage: fullPath
+      }
+    })
+
+    revalidatePath('/profile')
+    return { message: 'profile image updated successfully' }
+  } catch (error) {
+    return renderError(error)
+  }
 }
