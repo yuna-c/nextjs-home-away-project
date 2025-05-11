@@ -1,7 +1,7 @@
 'use server'
 
 import db from './db'
-import { imageSchema, profileSchema, validateWithZodSchema } from './schemas'
+import { imageSchema, profileSchema, propertySchema, validateWithZodSchema } from './schemas'
 import { uploadImage } from './supabase'
 import { auth, clerkClient, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
@@ -125,4 +125,19 @@ export const updateProfileImageAction = async (prevState: any, formData: FormDat
   } catch (error) {
     return renderError(error)
   }
+}
+
+// 임대/예약 항목 만들기 액션 정의
+export const createPropertyAction = async (prevState: any, formData: FormData): Promise<{ message: string }> => {
+  const user = await getAuthUser()
+
+  try {
+    const rawData = Object.fromEntries(formData)
+    const validatedFields = validateWithZodSchema(propertySchema, rawData)
+
+    return { message: 'property created' }
+  } catch (error) {
+    return renderError(error)
+  }
+  // redirect('/')
 }
