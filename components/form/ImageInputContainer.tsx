@@ -21,6 +21,7 @@ function ImageInputContainer(props: ImageInputContainerProps) {
   const { image, name, action, text } = props
   const [isUpdateFormVisible, setUpdateFormVisible] = useState(false)
   const userIcon = <LuUser className='mb-4 h-24 w-24 rounded bg-primary text-white' />
+
   return (
     <div>
       {image ? (

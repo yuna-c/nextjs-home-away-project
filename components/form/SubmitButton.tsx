@@ -14,6 +14,7 @@ type SubmitButtonProps = {
 
 export function SubmitButton({ className = '', text = 'submit', size = 'lg' }: SubmitButtonProps) {
   const { pending } = useFormStatus()
+
   return (
     <Button
       type='submit'
