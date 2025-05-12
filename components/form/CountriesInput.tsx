@@ -1,6 +1,7 @@
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formattedCountries } from '@/utils/countries'
+import Flag from 'react-world-flags'
 
 const name = 'country'
 
@@ -30,7 +31,12 @@ function CountriesInput({ defaultValue }: { defaultValue?: string }) {
                 value={item.code}
               >
                 <span className='flex items-center gap-2'>
-                  {item.flag} {item.name}
+                  <Flag
+                    code={item.code}
+                    style={{ width: 20, height: 20 }}
+                  />
+                  {/* {item.flag}  */}
+                  {item.name}
                 </span>
               </SelectItem>
             )
