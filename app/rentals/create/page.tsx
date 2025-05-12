@@ -1,6 +1,8 @@
 import CategoriesInput from '@/components/form/CategoriesInput'
+import CountriesInput from '@/components/form/CountriesInput'
 import FormContainer from '@/components/form/FormContainer'
 import FormInput from '@/components/form/FormInput'
+import ImageInput from '@/components/form/ImageInput'
 import PriceInput from '@/components/form/PriceInput'
 import { SubmitButton } from '@/components/form/SubmitButton'
 import TextAreaInput from '@/components/form/TextAreaInput'
@@ -36,6 +38,10 @@ function CreatePropertyPage() {
             name='description'
             labelText='Description (10 - 1000 words)'
           />
+          <div className='mt-4 grid gap-8 sm:grid-cols-2'>
+            <CountriesInput />
+            <ImageInput />
+          </div>
           <SubmitButton
             text='create rental'
             className='mt-12'
