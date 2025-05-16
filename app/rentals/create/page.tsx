@@ -1,3 +1,4 @@
+import AmenitiesInput from '@/components/form/AmenitiesInput'
 import CategoriesInput from '@/components/form/CategoriesInput'
 import CounterInput from '@/components/form/CounterInput'
 import CountriesInput from '@/components/form/CountriesInput'
@@ -48,7 +49,8 @@ function CreatePropertyPage() {
           <CounterInput detail='bedrooms' />
           <CounterInput detail='beds' />
           <CounterInput detail='baths' />
-
+          <h3 className='mb-4 mt-8 text-lg font-medium'>Amenities</h3>
+          <AmenitiesInput />
           <SubmitButton
             text='create rental'
             className='mt-12'
