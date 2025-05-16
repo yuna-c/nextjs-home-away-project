@@ -7,7 +7,10 @@ import { auth, clerkClient, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-// 인증된 유저 확인 로직 준비
+/**
+ * 현재 로그인된 Clerk 유저 정보를 가져오고,
+ * 프로필이 없으면 프로필 생성 페이지로 리디렉션하는 인증 유틸 함수
+ */
 const getAuthUser = async () => {
   const user = await currentUser()
 
@@ -18,11 +21,17 @@ const getAuthUser = async () => {
   return user
 }
 
+/**
+ * 에러 핸들링 유틸 – Error 객체를 메시지 문자열로 변환
+ */
 const renderError = (error: unknown): { message: string } => {
   // console.log(error)
   return { message: error instanceof Error ? error.message : 'An error occurred' }
 }
 
+/**
+ * 프로필 생성 액션 – 로그인된 유저의 정보를 바탕으로 새 프로필 생성
+ */
 export const createProfileAction = async (prevState: any, formData: FormData) => {
   try {
     const user = await currentUser()
@@ -52,6 +61,9 @@ export const createProfileAction = async (prevState: any, formData: FormData) =>
   redirect('/')
 }
 
+/**
+ * 현재 로그인 유저의 프로필 이미지 경로만 가져오기
+ */
 export const fetchProfileImage = async () => {
   const user = await currentUser()
   if (!user) return null
@@ -67,7 +79,10 @@ export const fetchProfileImage = async () => {
   return profile?.profileImage
 }
 
-// DB에서 현재 유저 프로필을 정확히 찾아오는 함수
+/**
+ * 현재 로그인 유저의 전체 프로필 정보 가져오기
+ * - 없으면 프로필 생성 페이지로 리디렉션
+ */
 export const fetchProfile = async () => {
   const user = await getAuthUser()
 
@@ -80,7 +95,9 @@ export const fetchProfile = async () => {
   return profile
 }
 
-// 프로필 수정 액션을 실행 정의
+/**
+ * 프로필 수정 액션 – 유효성 검증 후 DB 업데이트 및 캐시 재검증
+ */
 export const updateProfileAction = async (prevState: any, formData: FormData): Promise<{ message: string }> => {
   const user = await getAuthUser()
 
@@ -101,7 +118,9 @@ export const updateProfileAction = async (prevState: any, formData: FormData): P
   }
 }
 
-// 프로필 이미지 수정 액션 정의
+/**
+ * 프로필 이미지 수정 액션 – 이미지 업로드 후 DB에 경로 저장 및 캐시 재검증
+ */
 export const updateProfileImageAction = async (prevState: any, formData: FormData): Promise<{ message: string }> => {
   const user = await getAuthUser()
 
@@ -127,17 +146,31 @@ export const updateProfileImageAction = async (prevState: any, formData: FormDat
   }
 }
 
-// 임대/예약 항목 만들기 액션 정의
+/**
+ * 숙소 등록 액션 – 유효성 검증, 이미지 업로드, DB 저장 후 메인 페이지 리디렉션
+ */
 export const createPropertyAction = async (prevState: any, formData: FormData): Promise<{ message: string }> => {
   const user = await getAuthUser()
 
   try {
     const rawData = Object.fromEntries(formData)
-    const validatedFields = validateWithZodSchema(propertySchema, rawData)
+    const file = formData.get('image') as File
 
-    return { message: 'property created' }
+    const validatedFields = validateWithZodSchema(propertySchema, rawData)
+    const validateFile = validateWithZodSchema(imageSchema, { image: file })
+    const fullPath = await uploadImage(validateFile.image)
+
+    // 버킷 업로드
+    await db.property.create({
+      data: {
+        ...validatedFields,
+        image: fullPath,
+        profileId: user.id
+      }
+    })
   } catch (error) {
     return renderError(error)
   }
-  // redirect('/')
+
+  redirect('/')
 }
