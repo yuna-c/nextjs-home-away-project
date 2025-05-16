@@ -175,7 +175,9 @@ export const createPropertyAction = async (prevState: any, formData: FormData): 
   redirect('/')
 }
 
-/** 카테고리 및 검색어 기준으로 숙소 목록 조회 (최신순 정렬) */
+/**
+ * 카테고리 및 검색어 기준으로 숙소 목록 조회 (최신순 정렬)
+ */
 export const fetchProperties = async ({ search = '', category }: { search?: string; category?: string }) => {
   const properties = await db.property.findMany({
     where: {
