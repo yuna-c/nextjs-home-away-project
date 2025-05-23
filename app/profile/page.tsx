@@ -1,7 +1,7 @@
+import { SubmitButton } from '@/components/form/Buttons'
 import FormContainer from '@/components/form/FormContainer'
 import FormInput from '@/components/form/FormInput'
 import ImageInputContainer from '@/components/form/ImageInputContainer'
-import { SubmitButton } from '@/components/form/SubmitButton'
 import { updateProfileAction, fetchProfile, updateProfileImageAction } from '@/utils/actions'
 
 async function ProfilePage() {

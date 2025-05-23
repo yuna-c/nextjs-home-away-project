@@ -1,9 +1,9 @@
 'use client'
 
 import { Button } from '../ui/button'
+import { SubmitButton } from './Buttons'
 import FormContainer from './FormContainer'
 import ImageInput from './ImageInput'
-import { SubmitButton } from './SubmitButton'
 import { type actionFunction } from '@/utils/types'
 import Image from 'next/image'
 import { act, useState } from 'react'

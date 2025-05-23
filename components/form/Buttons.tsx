@@ -51,3 +51,17 @@ export const CardSignInButton = () => {
     </SignInButton>
   )
 }
+
+export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
+  const { pending } = useFormStatus()
+  return (
+    <Button
+      type='submit'
+      size='icon'
+      variant='outline'
+      className='cursor-pointer p-2'
+    >
+      {pending ? <Loader2 className='animate-spin' /> : isFavorite ? <FaHeart /> : <FaRegHeart />}
+    </Button>
+  )
+}

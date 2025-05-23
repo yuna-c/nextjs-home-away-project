@@ -1,4 +1,5 @@
 import AmenitiesInput from '@/components/form/AmenitiesInput'
+import { SubmitButton } from '@/components/form/Buttons'
 import CategoriesInput from '@/components/form/CategoriesInput'
 import CounterInput from '@/components/form/CounterInput'
 import CountriesInput from '@/components/form/CountriesInput'
@@ -6,7 +7,6 @@ import FormContainer from '@/components/form/FormContainer'
 import FormInput from '@/components/form/FormInput'
 import ImageInput from '@/components/form/ImageInput'
 import PriceInput from '@/components/form/PriceInput'
-import { SubmitButton } from '@/components/form/SubmitButton'
 import TextAreaInput from '@/components/form/TextAreaInput'
 import { createPropertyAction } from '@/utils/actions'
 
