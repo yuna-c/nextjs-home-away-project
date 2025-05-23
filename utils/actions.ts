@@ -251,7 +251,7 @@ export const toggleFavoriteAction = async (prevState: {
 }
 
 /**
- * 즐겨찾기 페이지
+ * 로그인된 사용자의 즐겨찾기 목록을 조회
  */
 export const fetchFavorites = async () => {
   const user = await getAuthUser()
@@ -273,4 +273,18 @@ export const fetchFavorites = async () => {
     }
   })
   return favorites.map((favorite) => favorite.property)
+}
+
+/**
+ * 로그인된 사용자의 즐겨찾기 목록을 조회
+ */
+export const fetchPropertyDetails = async (id: string) => {
+  return db.property.findUnique({
+    where: {
+      id
+    },
+    include: {
+      profile: true
+    }
+  })
 }
