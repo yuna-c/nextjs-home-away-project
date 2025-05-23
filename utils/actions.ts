@@ -216,6 +216,9 @@ export const fetchFavoriteId = async ({ propertyId }: { propertyId: string }) =>
   return favorite?.id || null
 }
 
+/**
+ * 좋아요 토글 액션 favoriteId 존재 시 삭제 / 없을 경우 생성 이후 해당 pathname 경로 캐시 재검증 (revalidatePath)
+ */
 export const toggleFavoriteAction = async (prevState: {
   propertyId: string
   favoriteId: string | null
@@ -245,4 +248,29 @@ export const toggleFavoriteAction = async (prevState: {
   } catch (error) {
     return renderError(error)
   }
+}
+
+/**
+ * 즐겨찾기 페이지
+ */
+export const fetchFavorites = async () => {
+  const user = await getAuthUser()
+  const favorites = await db.favorite.findMany({
+    where: {
+      profileId: user.id
+    },
+    select: {
+      property: {
+        select: {
+          id: true,
+          name: true,
+          tagline: true,
+          country: true,
+          price: true,
+          image: true
+        }
+      }
+    }
+  })
+  return favorites.map((favorite) => favorite.property)
 }

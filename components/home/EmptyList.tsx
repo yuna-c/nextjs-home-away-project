@@ -8,7 +8,7 @@ function EmptyList({
 }: {
   heading?: string
   message?: string
-  btnText: string
+  btnText?: string
 }) {
   return (
     <div className='mt-4'>
