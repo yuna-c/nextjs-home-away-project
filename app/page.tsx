@@ -4,7 +4,7 @@ import PropertiesContainer from '@/components/home/PropertiesContainer'
 import { Suspense } from 'react'
 
 function HomePage({ searchParams }: { searchParams: { category?: string; search?: string } }) {
-  console.log(searchParams, `1`)
+  console.log(searchParams, `😄`)
 
   return (
     <section>
