@@ -198,3 +198,24 @@ export const fetchProperties = async ({ search = '', category }: { search?: stri
   })
   return properties
 }
+
+/**
+ * 유저가 해당 숙소를 좋아요했는지 확인하고 favorite ID 반환 (없으면 null)
+ */
+export const fetchFavoriteId = async ({ propertyId }: { propertyId: string }) => {
+  const user = await getAuthUser()
+  const favorite = await db.favorite.findFirst({
+    where: {
+      propertyId,
+      profileId: user.id
+    },
+    select: {
+      id: true
+    }
+  })
+  return favorite?.id || null
+}
+
+export const toggleFavoriteAction = async () => {
+  return { message: 'toggle favorite' }
+}
