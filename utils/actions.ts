@@ -276,7 +276,7 @@ export const fetchFavorites = async () => {
 }
 
 /**
- * 로그인된 사용자의 즐겨찾기 목록을 조회
+ * 특정 숙소(property)의 상세 정보를 가져오는 내용(상세 페이지)
  */
 export const fetchPropertyDetails = async (id: string) => {
   return db.property.findUnique({
