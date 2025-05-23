@@ -11,7 +11,7 @@ function NavSearch() {
   const { replace } = useRouter()
 
   const [search, setSearch] = useState(searchParams.get('search')?.toString() || '')
-  const handleSearch = (value: string) => {
+  const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams)
     if (value) {
       params.set('search', value)
@@ -19,9 +19,13 @@ function NavSearch() {
       params.delete('search')
     }
     replace(`${pathname}?${params.toString()}`)
-  }
+  }, 500)
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    if (!searchParams.get('search')) {
+      setSearch('')
+    }
+  }, [searchParams.get('search')])
 
   return (
     <Input
