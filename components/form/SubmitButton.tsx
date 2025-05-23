@@ -1,8 +1,10 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { SignInButton } from '@clerk/nextjs'
 import { Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
+import { FaRegHeart, FaHeart } from 'react-icons/fa'
 
 type btnSize = 'default' | 'lg' | 'sm'
 
@@ -31,5 +33,21 @@ export function SubmitButton({ className = '', text = 'submit', size = 'lg' }: S
         text
       )}
     </Button>
+  )
+}
+
+export const CardSignInButton = () => {
+  return (
+    <SignInButton mode='modal'>
+      <Button
+        type='button'
+        size='icon'
+        variant='outline'
+        className='curser-pointer p-2'
+        asChild
+      >
+        <FaRegHeart />
+      </Button>
+    </SignInButton>
   )
 }
