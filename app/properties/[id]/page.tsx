@@ -3,6 +3,7 @@ import PropertyRating from '@/components/card/PropertyRating'
 import BookingCalendar from '@/components/properties/BookingCalendar'
 import BreadCrumbs from '@/components/properties/BreadCrumbs'
 import ImageContainer from '@/components/properties/ImageContainer'
+import PropertyDetails from '@/components/properties/PropertyDetails'
 import ShareButton from '@/components/properties/ShareButton'
 import { fetchPropertyDetails } from '@/utils/actions'
 import { redirect } from 'next/navigation'
@@ -43,6 +44,8 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
               propertyId={property.id}
             />
           </div>
+          {/* 방 세부 정보 */}
+          <PropertyDetails details={details} />
         </div>
 
         <div className='flex flex-col items-center lg:col-span-4'>
