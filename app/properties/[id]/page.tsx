@@ -8,9 +8,17 @@ import ImageContainer from '@/components/properties/ImageContainer'
 import PropertyDetails from '@/components/properties/PropertyDetails'
 import ShareButton from '@/components/properties/ShareButton'
 import UserInfo from '@/components/properties/UserInfo'
+import { Skeleton } from '@/components/ui/skeleton'
 import { fetchPropertyDetails } from '@/utils/actions'
 import { Separator } from '@radix-ui/react-dropdown-menu'
+import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
+
+// react-leaflet이 브라우저 전용 API를 사용하기 때문에 클라이언트에서만 import하게 만듦 CSR만 하게 (SSR 방지)
+const DynamicMap = dynamic(() => import('@/components/properties/PropertyMap'), {
+  ssr: false,
+  loading: () => <Skeleton className='h-[400px] w-full' />
+})
 
 async function PropertyDetailsPage({ params }: { params: { id: string } }) {
   const property = await fetchPropertyDetails(params.id)
@@ -63,6 +71,8 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
           <Description description={property.description} />
           {/* 편의 사항 */}
           <Amenities amenities={property.amenities} />
+          {/* 지도 */}
+          <DynamicMap countryCode={property.country} />
         </div>
 
         <div className='flex flex-col items-center lg:col-span-4'>
