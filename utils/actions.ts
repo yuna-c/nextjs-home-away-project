@@ -288,3 +288,38 @@ export const fetchPropertyDetails = async (id: string) => {
     }
   })
 }
+
+/**
+ * 리뷰 생성(Create)
+ */
+export const createReviewAction = async () => {
+  return { message: 'create review' }
+}
+
+/**
+ * 모든 리뷰 조회(Read)
+ */
+export const fetchPropertyReviews = async () => {
+  return { message: 'fetch reviews' }
+}
+
+/**
+ * 특정 유저의 리뷰 조회 (by user)
+ */
+export const fetchPropertyReviewsByUser = async () => {
+  return { message: 'fetch user reviews' }
+}
+
+/**
+ * 리뷰 삭제(Delete)
+ */
+export const deleteReviewAction = async () => {
+  return { message: 'delete  reviews' }
+}
+
+/**
+ * 리뷰 수정
+ */
+export const updateReviewAction = async () => {
+  return { message: 'update review' }
+}
