@@ -1,5 +1,5 @@
 function ReviewCard() {
-  return <div></div>
+  return <div>ReviewCard</div>
 }
 
 export default ReviewCard
