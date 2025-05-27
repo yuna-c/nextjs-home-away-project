@@ -318,7 +318,7 @@ export const deleteReviewAction = async () => {
 }
 
 /**
- * 리뷰 수정
+ * 리뷰 수정(Update)
  */
 export const updateReviewAction = async () => {
   return { message: 'update review' }
