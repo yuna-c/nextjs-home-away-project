@@ -1,7 +1,7 @@
 'use server'
 
 import db from './db'
-import { imageSchema, profileSchema, propertySchema, validateWithZodSchema } from './schemas'
+import { createReviewSchema, imageSchema, profileSchema, propertySchema, validateWithZodSchema } from './schemas'
 import { uploadImage } from './supabase'
 import { auth, clerkClient, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
@@ -292,8 +292,23 @@ export const fetchPropertyDetails = async (id: string) => {
 /**
  * 리뷰 생성(Create)
  */
-export const createReviewAction = async () => {
-  return { message: 'create review' }
+export const createReviewAction = async (prevState: any, formData: FormData) => {
+  const user = await getAuthUser()
+
+  try {
+    const rawData = Object.fromEntries(formData)
+    const validatedFields = validateWithZodSchema(createReviewSchema, rawData)
+    await db.review.create({
+      data: {
+        ...validatedFields,
+        profileId: user.id
+      }
+    })
+    revalidatePath(`/properties/${validatedFields.propertyId}`)
+    return { message: 'Review submitted successfully' }
+  } catch (error) {
+    return renderError(error)
+  }
 }
 
 /**
