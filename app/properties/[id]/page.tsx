@@ -1,5 +1,6 @@
 import FavoriteToggleButton from '@/components/card/FavoriteToggleButton'
 import PropertyRating from '@/components/card/PropertyRating'
+import Amenities from '@/components/properties/Amenities'
 import BookingCalendar from '@/components/properties/BookingCalendar'
 import BreadCrumbs from '@/components/properties/BreadCrumbs'
 import Description from '@/components/properties/Description'
@@ -22,6 +23,7 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
 
   return (
     <section>
+      {/* 이동 경로 표시줄 */}
       <BreadCrumbs name={property.name} />
       <header className='mt-4 flex items-center justify-between'>
         <h1 className='text-4xl font-bold capitalize'>{property.tagline}</h1>
@@ -32,10 +34,12 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
             name={property.name}
             propertyId={property.id}
           />
+          {/* 좋아요 버튼 */}
           <FavoriteToggleButton propertyId={property.id} />
         </div>
       </header>
 
+      {/* 배경 사진 */}
       <ImageContainer
         mainImage={property.image}
         name={property.name}
@@ -44,6 +48,7 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
         <div className='lg:col-span-8'>
           <div className='flex items-center gap-x-4'>
             <h1 className='text-xl font-bold'>{property.name}</h1>
+            {/* 별점, 리뷰 */}
             <PropertyRating
               inPage
               propertyId={property.id}
@@ -51,9 +56,13 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
           </div>
           {/* 방 세부 정보 */}
           <PropertyDetails details={details} />
+          {/* 사용자 정보 */}
           <UserInfo profile={{ firstName, profileImage }} />
           <Separator className='mt-4' />
+          {/* 주석 글 */}
           <Description description={property.description} />
+          {/* 편의 사항 */}
+          <Amenities amenities={property.amenities} />
         </div>
 
         <div className='flex flex-col items-center lg:col-span-4'>
