@@ -314,8 +314,24 @@ export const createReviewAction = async (prevState: any, formData: FormData) => 
 /**
  * 모든 리뷰 조회(Read)
  */
-export const fetchPropertyReviews = async () => {
-  return { message: 'fetch reviews' }
+export const fetchPropertyReviews = async (propertyId: string) => {
+  const reviews = await db.review.findMany({
+    where: {
+      propertyId
+    },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      profile: {
+        select: {
+          firstName: true,
+          profileImage: true
+        }
+      }
+    }
+  })
+  return reviews
 }
 
 /**
