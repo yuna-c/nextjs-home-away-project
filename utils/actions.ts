@@ -372,6 +372,7 @@ export const deleteReviewAction = async (prevState: { reviewId: string }) => {
         profileId: user.id
       }
     })
+    revalidatePath('/reviews')
     return { message: 'delete reviews' }
   } catch (error) {
     return renderError(error)
