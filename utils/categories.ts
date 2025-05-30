@@ -1,4 +1,5 @@
 import { IconType } from 'react-icons'
+import { FaEarthOceania } from 'react-icons/fa6'
 import { GiWoodCabin, GiMushroomHouse } from 'react-icons/gi'
 import { GoContainer } from 'react-icons/go'
 import { MdCabin } from 'react-icons/md'
