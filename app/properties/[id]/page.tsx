@@ -1,7 +1,7 @@
 import FavoriteToggleButton from '@/components/card/FavoriteToggleButton'
 import PropertyRating from '@/components/card/PropertyRating'
 import Amenities from '@/components/properties/Amenities'
-import BookingCalendar from '@/components/properties/BookingCalendar'
+// import BookingCalendar from '@/components/properties/_BookingCalendar'
 import BreadCrumbs from '@/components/properties/BreadCrumbs'
 import Description from '@/components/properties/Description'
 import ImageContainer from '@/components/properties/ImageContainer'
@@ -35,6 +35,8 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
   const { userId } = auth()
   const isNotOwner = property.profile.clerkId !== userId
   const reviewDoesNotExist = userId && isNotOwner && !(await findExistingReview(userId, property.id))
+
+  console.log(property.bookings)
 
   return (
     <section>
@@ -84,7 +86,7 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
 
         <div className='flex flex-col items-center lg:col-span-4'>
           {/* calender */}
-          <BookingCalendar />
+          {/* <BookingCalendar /> */}
         </div>
       </section>
       {reviewDoesNotExist && <SubmitReview propertyId={property.id} />}
