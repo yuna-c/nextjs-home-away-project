@@ -1,4 +1,3 @@
-import BookingWrapper from '@/components/booking/BookingWrapper'
 import FavoriteToggleButton from '@/components/card/FavoriteToggleButton'
 import PropertyRating from '@/components/card/PropertyRating'
 import Amenities from '@/components/properties/Amenities'

@@ -3,6 +3,7 @@ import { LuUser } from 'react-icons/lu'
 
 async function UserIcon() {
   const profileImage = await fetchProfileImage()
+
   if (profileImage) {
     return (
       <img
@@ -11,6 +12,7 @@ async function UserIcon() {
       />
     )
   }
+
   return <LuUser className='!h-6 !w-6 rounded-full bg-primary text-white' />
 }
 
