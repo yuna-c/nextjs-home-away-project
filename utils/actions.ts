@@ -496,7 +496,7 @@ export const fetchBookings = async () => {
 /**
  * 예약 삭제 요청 처리
  */
-export const deleteBookingsAction = async (prevState: { bookingId: string }) => {
+export const deleteBookingAction = async (prevState: { bookingId: string }) => {
   const { bookingId } = prevState
   const user = await getAuthUser()
 

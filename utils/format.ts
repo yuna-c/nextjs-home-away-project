@@ -1,4 +1,6 @@
-// 숙소 가격 달러 표기
+/*
+ * 숙소 가격 달러 표기
+ */
 export const formatCurrency = (amount: number | null) => {
   const value = amount || 0
   return new Intl.NumberFormat('en-US', {
@@ -9,7 +11,20 @@ export const formatCurrency = (amount: number | null) => {
   }).format(value)
 }
 
-// 침실, 욕실, 손님, 침대 수량 표기
+/*
+ * 침실, 욕실, 손님, 침대 수량 표기
+ */
 export function formatQuantity(quantity: number, noun: string): string {
   return quantity === 1 ? `${quantity} ${noun}` : `${quantity} ${noun}s`
+}
+
+/**
+ * 날짜 객체를 '연도 월 일' 형식(영문)으로 포맷팅 (예: January 1, 2025)
+ */
+export const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date)
 }
