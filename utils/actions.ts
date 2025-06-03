@@ -393,6 +393,9 @@ export const updateReviewAction = async () => {
   return { message: 'update review' }
 }
 
+/**
+ * 숙소 평점 및 리뷰 수 조회
+ */
 export async function fetchPropertyRating(propertyId: string) {
   const result = await db.review.groupBy({
     by: ['propertyId'],
@@ -409,6 +412,9 @@ export async function fetchPropertyRating(propertyId: string) {
   return { rating: result[0]?._avg.rating?.toFixed() ?? 0, count: result[0]?._count.rating ?? 0 }
 }
 
+/**
+ * 사용자의 기존 리뷰 존재 여부 확인
+ */
 export const findExistingReview = async (userId: string, propertyId: string) => {
   return db.review.findFirst({
     where: {
@@ -418,6 +424,9 @@ export const findExistingReview = async (userId: string, propertyId: string) => 
   })
 }
 
+/**
+ * 예약 생성 (Booking 생성)
+ */
 export const createBookingAction = async (prevState: { propertyId: string; checkIn: Date; checkOut: Date }) => {
   const user = await getAuthUser()
   const { propertyId, checkIn, checkOut } = prevState
@@ -456,4 +465,52 @@ export const createBookingAction = async (prevState: { propertyId: string; check
   }
 
   redirect('/bookings')
+}
+
+/**
+ * 로그인한 사용자의 예약 목록 조회
+ */
+export const fetchBookings = async () => {
+  const user = await getAuthUser()
+  const bookings = await db.booking.findMany({
+    where: {
+      profileId: user.id
+    },
+    include: {
+      property: {
+        select: {
+          id: true,
+          name: true,
+          country: true
+        }
+      }
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  })
+
+  return bookings
+}
+
+/**
+ * 예약 삭제 요청 처리
+ */
+export const deleteBookingsAction = async (prevState: { bookingId: string }) => {
+  const { bookingId } = prevState
+  const user = await getAuthUser()
+
+  try {
+    const result = await db.booking.delete({
+      where: {
+        id: bookingId,
+        profileId: user.id
+      }
+    })
+
+    revalidatePath('/bookings')
+    return { message: 'Booking deleted successfully' }
+  } catch (error) {
+    return renderError(error)
+  }
 }

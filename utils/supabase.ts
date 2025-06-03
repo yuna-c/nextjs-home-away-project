@@ -7,6 +7,9 @@ const key = process.env.SUPABASE_KEY as string
 
 const supabase = createClient(url, key)
 
+/*
+ * 수파베이스 이미지 업로드
+ */
 export const uploadImage = async (image: File) => {
   const timestamp = Date.now()
   const newName = `${timestamp}-${image.name}`
