@@ -514,3 +514,69 @@ export const deleteBookingAction = async (prevState: { bookingId: string }) => {
     return renderError(error)
   }
 }
+
+/**
+ * 내가 등록한 숙소 목록 조회 + 각 숙소의 총 숙박일수 및 총 수익 합계 계산
+ */
+export const fetchRentals = async () => {
+  const user = await getAuthUser()
+  const rentals = await db.property.findMany({
+    where: {
+      profileId: user.id
+    },
+    select: {
+      id: true,
+      name: true,
+      price: true
+    }
+  })
+
+  const rentalsWithBookingsSums = await Promise.all(
+    rentals.map(async (rental) => {
+      // aggregate : prisma 집계 함수
+      const totalNightsSum = await db.booking.aggregate({
+        where: {
+          profileId: rental.id
+        },
+        _sum: {
+          totalNights: true
+        }
+      })
+      const orderTotalSum = await db.booking.aggregate({
+        where: {
+          propertyId: rental.id
+        },
+        _sum: {
+          orderTotal: true
+        }
+      })
+      return {
+        ...rental,
+        totalNightsSum: totalNightsSum._sum.totalNights,
+        orderTotalSum: orderTotalSum._sum.orderTotal
+      }
+    })
+  )
+  return rentalsWithBookingsSums
+}
+
+/**
+ * 내가 등록한 숙소 중 하나 삭제 (예약 관리 페이지용)
+ */
+export const deleteRentalAction = async (prevState: { propertyId: string }) => {
+  const { propertyId } = prevState
+  const user = await getAuthUser()
+  try {
+    await db.property.delete({
+      where: {
+        id: propertyId,
+        profileId: user.id
+      }
+    })
+
+    revalidatePath('/rentals')
+    return { message: 'Rental deleted successfully' }
+  } catch (error) {
+    return renderError(error)
+  }
+}
