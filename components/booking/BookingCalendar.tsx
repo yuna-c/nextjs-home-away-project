@@ -10,6 +10,10 @@ import { DateRange } from 'react-day-picker'
 function BookingCalendar() {
   const currentDate = new Date()
   const [range, setRange] = useState<DateRange | undefined>(defaultSelected)
+  const bookings = useProperty((state) => state.bookings)
+  console.log(bookings)
+
+  const blockedPeriods = generateBlockedPeriods({ bookings, today: currentDate })
 
   useEffect(() => {
     // setState: Zustand 전역 상태 업데이트 함수 (부분 업데이트)
@@ -23,6 +27,7 @@ function BookingCalendar() {
       selected={range}
       onSelect={setRange}
       className='mb-4'
+      disabled={blockedPeriods}
     />
   )
 }
