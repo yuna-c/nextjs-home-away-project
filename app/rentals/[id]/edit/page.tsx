@@ -15,6 +15,7 @@ import { redirect } from 'next/navigation'
 async function EditRentalPage({ params }: { params: { id: string } }) {
   const property = await fetchRentalDetails(params.id)
   if (!property) return redirect('/')
+  const defaultAmenities: Amenity[] = JSON.parse(property.amenities)
 
   return (
     <section>
@@ -80,7 +81,8 @@ async function EditRentalPage({ params }: { params: { id: string } }) {
             detail='baths'
             defaultValue={property.baths}
           />
-
+          <h3 className='mb-6 mt-10 text-lg font-medium'>Amenities </h3>
+          <AmenitiesInput defaultValue={defaultAmenities} />
           <SubmitButton
             text='edit property'
             className='mt-12'

@@ -5,7 +5,12 @@ import { amenities, Amenity } from '@/utils/amenities'
 import { useState } from 'react'
 
 function AmenitiesInput({ defaultValue }: { defaultValue?: Amenity[] /* 묶음 저장 후 구문 분석 해야하니까 배열로 */ }) {
-  const [selectedAmenities, setSelectedAmenities] = useState<Amenity[]>(defaultValue || amenities)
+  // defaultValue 배열을 돌면서, 각 요소에 아이콘 정보(icon) 를 붙이는 로직(DB에 아이콘 없어서 )
+  const amenitiesWithIcons = defaultValue?.map(({ name, selected }) => {
+    return { name, selected, icon: amenities.find((amenity) => amenity.name === name)!.icon }
+  })
+
+  const [selectedAmenities, setSelectedAmenities] = useState<Amenity[]>(amenitiesWithIcons || amenities)
 
   const handleChange = (amenity: Amenity) => {
     setSelectedAmenities((prev) => {
