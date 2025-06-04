@@ -599,14 +599,55 @@ export const fetchRentalDetails = async (propertyId: string) => {
  * 사용자 등록 숙소 정보 수정 처리 (미구현)
  * - 추후 FormData 기반으로 업데이트 로직 추가 예정
  */
-export const updatePropertyAction = async () => {
-  return { message: 'update property action' }
+export const updatePropertyAction = async (prevState: any, formData: FormData): Promise<{ message: string }> => {
+  const user = await getAuthUser()
+  const propertyId = formData.get('id') as string
+
+  try {
+    const rawData = Object.fromEntries(formData)
+    const validatedFields = validateWithZodSchema(propertySchema, rawData)
+    await db.property.update({
+      where: {
+        id: propertyId, // 수정할 숙소의 id
+        profileId: user.id // 현재 로그인한 사용자의 id (숙소 주인인지 확인)
+      },
+      data: {
+        ...validatedFields // 덮어 씌울 데이터
+      }
+    })
+
+    revalidatePath(`/rental/${propertyId}/edit`)
+    return { message: 'Update Successful' }
+  } catch (error) {
+    return renderError(error)
+  }
 }
 
 /*
  * 사용자 등록 숙소 이미지 수정 처리 (미구현)
  * - 추후 FormData에서 이미지 파일 받아 Supabase 업로드 및 DB 반영 예정
  */
-export const updatePropertyImageAction = async () => {
-  return { message: 'update property image' }
+export const updatePropertyImageAction = async (prevState: any, formData: FormData): Promise<{ message: string }> => {
+  const user = await getAuthUser()
+  const propertyId = formData.get('id') as string
+
+  try {
+    const image = formData.get('image') as File
+    const validatedFields = validateWithZodSchema(imageSchema, { image })
+    const fullPath = await uploadImage(validatedFields.image)
+    await db.property.update({
+      where: {
+        id: propertyId,
+        profileId: user.id
+      },
+      data: {
+        image: fullPath
+      }
+    })
+
+    revalidatePath(`/rental/${propertyId}/edit`)
+    return { message: 'Property Image Updated Successfully' }
+  } catch (error) {
+    return renderError(error)
+  }
 }
