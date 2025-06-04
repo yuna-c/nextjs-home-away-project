@@ -580,3 +580,33 @@ export const deleteRentalAction = async (prevState: { propertyId: string }) => {
     return renderError(error)
   }
 }
+
+/*
+ * 사용자 등록 숙소의 상세 정보 조회
+ * - 로그인한 사용자 기준으로 propertyId에 해당하는 숙소 정보 반환
+ */
+export const fetchRentalDetails = async (propertyId: string) => {
+  const user = await getAuthUser()
+  return db.property.findUnique({
+    where: {
+      id: propertyId,
+      profileId: user.id
+    }
+  })
+}
+
+/*
+ * 사용자 등록 숙소 정보 수정 처리 (미구현)
+ * - 추후 FormData 기반으로 업데이트 로직 추가 예정
+ */
+export const updatePropertyAction = async () => {
+  return { message: 'update property action' }
+}
+
+/*
+ * 사용자 등록 숙소 이미지 수정 처리 (미구현)
+ * - 추후 FormData에서 이미지 파일 받아 Supabase 업로드 및 DB 반영 예정
+ */
+export const updatePropertyImageAction = async () => {
+  return { message: 'update property image' }
+}
