@@ -651,3 +651,32 @@ export const updatePropertyImageAction = async (prevState: any, formData: FormDa
     return renderError(error)
   }
 }
+
+/*
+ * 내가 등록한 숙소에 어떤 예약이 들어왔는지 확인
+ */
+export const fetchReservations = async () => {
+  const user = await getAuthUser()
+  const reservations = await db.booking.findMany({
+    where: {
+      property: {
+        profileId: user.id
+      }
+    },
+    orderBy: {
+      createdAt: 'desc' // createdAt(생성일자)을 기준으로 내림차순(desc) 정렬
+    },
+    include: {
+      property: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          country: true
+        }
+        // 숙소의 ID, 이름, 가격, 국가만 선택적으로 가져옴
+      }
+    }
+  })
+  return reservations
+}
