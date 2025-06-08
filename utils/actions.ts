@@ -2,6 +2,7 @@
 
 import { calculateTotals } from './calculateTotals'
 import db from './db'
+import { formatDate } from './format'
 import { createReviewSchema, imageSchema, profileSchema, propertySchema, validateWithZodSchema } from './schemas'
 import { uploadImage } from './supabase'
 import { auth, clerkClient, currentUser } from '@clerk/nextjs/server'
@@ -704,4 +705,47 @@ export const fetchStats = async () => {
     propertiesCount,
     bookingsCount
   }
+}
+
+/*
+ * 관리자 대시보드용 차트 통계
+ */
+export const fetchChartsData = async () => {
+  await getAdminUser()
+  const date = new Date()
+
+  // 6개월 예약
+  date.setMonth(date.getMonth() - 6)
+  const sixMonthsAgo = date
+
+  // 6개월 이전 예약
+  const bookings = await db.booking.findMany({
+    where: {
+      createdAt: {
+        gte: sixMonthsAgo
+      }
+    },
+    orderBy: {
+      createdAt: 'asc' // 오름차순
+    }
+  })
+
+  // 달별 예약 카운트 배열 가공
+  const bookingsPerMonth = bookings.reduce(
+    (total, current) => {
+      const date = formatDate(current.createdAt, true)
+      const existingEntry = total.find((entry) => entry.date === date)
+
+      if (existingEntry) {
+        existingEntry.count += 1
+      } else {
+        total.push({ date, count: 1 })
+      }
+
+      return total
+    },
+    [] as Array<{ date: string; count: number }>
+  )
+
+  return bookingsPerMonth
 }

@@ -21,10 +21,27 @@ export function formatQuantity(quantity: number, noun: string): string {
 /**
  * 날짜 객체를 '연도 월 일' 형식(영문)으로 포맷팅 (예: January 1, 2025)
  */
-export const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat('en-US', {
+// 연 월 일 전체 출력
+// export const formatDate = (date: Date) => {
+//   return new Intl.DateTimeFormat('en-US', {
+//     year: 'numeric',
+//     month: 'long',
+//     day: 'numeric'
+//   }).format(date)
+// }
+
+// 연 월 출력
+export const formatDate = (date: Date, onlyMonth?: boolean) => {
+  // formatDate(new Date(), true)
+  const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(date)
+    month: 'long'
+  }
+
+  // formatDate(new Date())
+  if (!onlyMonth) {
+    options.day = 'numeric'
+  }
+
+  return new Intl.DateTimeFormat('en-US', options).format(date)
 }
