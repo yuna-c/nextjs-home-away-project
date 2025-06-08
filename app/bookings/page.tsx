@@ -24,6 +24,7 @@ async function BookingsPage() {
             <TableHead>Total</TableHead>
             <TableHead>Check In</TableHead>
             <TableHead>Check Out</TableHead>
+            <TableHead>Customer</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -31,6 +32,7 @@ async function BookingsPage() {
           {bookings.map((booking) => {
             const { id, checkIn, checkOut, orderTotal, totalNights } = booking
             const { id: propertyId, name, country } = booking.property
+            const { firstName } = booking.profile
             const startDate = formatDate(checkIn)
             const endDate = formatDate(checkOut)
 
@@ -51,6 +53,7 @@ async function BookingsPage() {
                 <TableCell>{formatCurrency(orderTotal)}</TableCell>
                 <TableCell>{startDate}</TableCell>
                 <TableCell>{endDate}</TableCell>
+                <TableCell>{firstName}</TableCell>
                 <TableCell>
                   <DeleteBooking bookingId={id} />
                 </TableCell>

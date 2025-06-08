@@ -493,8 +493,14 @@ export const fetchBookings = async () => {
           name: true,
           country: true
         }
+      },
+      profile: {
+        select: {
+          firstName: true
+        }
       }
     },
+
     orderBy: {
       createdAt: 'desc'
     }
