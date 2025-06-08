@@ -23,6 +23,15 @@ const getAuthUser = async () => {
 }
 
 /**
+ * 관리자 전용 페이지 접근 제어용
+ */
+const getAdminUser = async () => {
+  const user = await getAuthUser()
+  if (user.id !== process.env.ADMIN_USER_ID) redirect('/')
+  return user
+}
+
+/**
  * 에러 핸들링 유틸 – Error 객체를 메시지 문자열로 변환
  */
 const renderError = (error: unknown): { message: string } => {
@@ -679,4 +688,20 @@ export const fetchReservations = async () => {
     }
   })
   return reservations
+}
+
+/*
+ * 관리자 대시보드용 통계 데이터 조회
+ */
+export const fetchStats = async () => {
+  await getAdminUser()
+  const usersCount = await db.profile.count()
+  const propertiesCount = await db.property.count()
+  const bookingsCount = await db.booking.count()
+
+  return {
+    usersCount,
+    propertiesCount,
+    bookingsCount
+  }
 }
