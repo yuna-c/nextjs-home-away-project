@@ -419,7 +419,10 @@ export async function fetchPropertyRating(propertyId: string) {
       propertyId
     }
   })
-  return { rating: result[0]?._avg.rating?.toFixed() ?? 0, count: result[0]?._count.rating ?? 0 }
+  return {
+    rating: result[0]?._avg.rating?.toFixed() ?? 0,
+    count: result[0]?._count.rating ?? 0
+  }
 }
 
 /**
@@ -439,6 +442,8 @@ export const findExistingReview = async (userId: string, propertyId: string) => 
  */
 export const createBookingAction = async (prevState: { propertyId: string; checkIn: Date; checkOut: Date }) => {
   const user = await getAuthUser()
+  let bookingId: null | string = null
+
   const { propertyId, checkIn, checkOut } = prevState
   const property = await db.property.findUnique({
     where: {
@@ -470,11 +475,12 @@ export const createBookingAction = async (prevState: { propertyId: string; check
         propertyId
       }
     })
+    bookingId = booking.id
   } catch (error) {
     return renderError(error)
   }
 
-  redirect('/bookings')
+  redirect(`checkout?bookingId=${bookingId}`)
 }
 
 /**
@@ -582,6 +588,7 @@ export const fetchRentals = async () => {
 export const deleteRentalAction = async (prevState: { propertyId: string }) => {
   const { propertyId } = prevState
   const user = await getAuthUser()
+
   try {
     await db.property.delete({
       where: {
@@ -622,6 +629,7 @@ export const updatePropertyAction = async (prevState: any, formData: FormData): 
   try {
     const rawData = Object.fromEntries(formData)
     const validatedFields = validateWithZodSchema(propertySchema, rawData)
+
     await db.property.update({
       where: {
         id: propertyId, // 수정할 숙소의 id
@@ -651,6 +659,7 @@ export const updatePropertyImageAction = async (prevState: any, formData: FormDa
     const image = formData.get('image') as File
     const validatedFields = validateWithZodSchema(imageSchema, { image })
     const fullPath = await uploadImage(validatedFields.image)
+
     await db.property.update({
       where: {
         id: propertyId,
