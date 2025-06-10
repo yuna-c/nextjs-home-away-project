@@ -480,7 +480,7 @@ export const createBookingAction = async (prevState: { propertyId: string; check
     return renderError(error)
   }
 
-  redirect(`checkout?bookingId=${bookingId}`)
+  redirect(`/checkout?bookingId=${bookingId}`)
 }
 
 /**
