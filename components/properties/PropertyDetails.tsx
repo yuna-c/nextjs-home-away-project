@@ -12,10 +12,10 @@ type PropertyDetailsProps = {
 function PropertyDetails({ details: { bedrooms, baths, guests, beds } }: PropertyDetailsProps) {
   return (
     <p className='text-md font-light'>
-      <span>{formatQuantity(bedrooms, 'bedrooms')} &middot; </span>
-      <span>{formatQuantity(baths, 'baths')} &middot; </span>
-      <span>{formatQuantity(guests, 'guests')} &middot; </span>
-      <span>{formatQuantity(beds, 'beds')}</span>
+      <span>{formatQuantity(bedrooms, 'bedroom')} &middot; </span>
+      <span>{formatQuantity(baths, 'bath')} &middot; </span>
+      <span>{formatQuantity(guests, 'guest')} &middot; </span>
+      <span>{formatQuantity(beds, 'bed')}</span>
     </p>
   )
 }
