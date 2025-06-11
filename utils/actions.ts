@@ -442,6 +442,15 @@ export const findExistingReview = async (userId: string, propertyId: string) => 
  */
 export const createBookingAction = async (prevState: { propertyId: string; checkIn: Date; checkOut: Date }) => {
   const user = await getAuthUser()
+
+  // 결제 미 완료시 db 제거하기 위한 설정 추가
+  await db.booking.deleteMany({
+    where: {
+      profileId: user.id,
+      paymentStatus: false
+    }
+  })
+
   let bookingId: null | string = null
 
   const { propertyId, checkIn, checkOut } = prevState
@@ -490,7 +499,9 @@ export const fetchBookings = async () => {
   const user = await getAuthUser()
   const bookings = await db.booking.findMany({
     where: {
-      profileId: user.id
+      profileId: user.id,
+      // 결제 미 완료시 db 제거하기 위한 설정 추가
+      paymentStatus: true
     },
     include: {
       property: {
@@ -558,7 +569,9 @@ export const fetchRentals = async () => {
       // aggregate : prisma 집계 함수
       const totalNightsSum = await db.booking.aggregate({
         where: {
-          profileId: rental.id
+          profileId: rental.id,
+          // 결제 미 완료시 db 제거하기 위한 설정 추가
+          paymentStatus: true
         },
         _sum: {
           totalNights: true
@@ -566,7 +579,9 @@ export const fetchRentals = async () => {
       })
       const orderTotalSum = await db.booking.aggregate({
         where: {
-          propertyId: rental.id
+          propertyId: rental.id,
+          // 결제 미 완료시 db 제거하기 위한 설정 추가
+          paymentStatus: true
         },
         _sum: {
           orderTotal: true
@@ -684,6 +699,8 @@ export const fetchReservations = async () => {
   const user = await getAuthUser()
   const reservations = await db.booking.findMany({
     where: {
+      // 결제 미 완료시 db 제거하기 위한 설정 추가
+      paymentStatus: true,
       property: {
         profileId: user.id
       }
@@ -713,7 +730,12 @@ export const fetchStats = async () => {
   await getAdminUser()
   const usersCount = await db.profile.count()
   const propertiesCount = await db.property.count()
-  const bookingsCount = await db.booking.count()
+  const bookingsCount = await db.booking.count({
+    where: {
+      // 결제 미 완료시 db 제거하기 위한 설정 추가
+      paymentStatus: true
+    }
+  })
 
   return {
     usersCount,
@@ -736,6 +758,8 @@ export const fetchChartsData = async () => {
   // 6개월 이전 예약
   const bookings = await db.booking.findMany({
     where: {
+      // 결제 미 완료시 db 제거하기 위한 설정 추가
+      paymentStatus: true,
       createdAt: {
         gte: sixMonthsAgo
       }
