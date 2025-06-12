@@ -6,7 +6,7 @@ import FormContainer from './FormContainer'
 import ImageInput from './ImageInput'
 import { type actionFunction } from '@/utils/types'
 import Image from 'next/image'
-import { act, useState } from 'react'
+import { useState } from 'react'
 import { LuUser } from 'react-icons/lu'
 
 type ImageInputContainerProps = {

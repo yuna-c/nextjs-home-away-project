@@ -1,12 +1,11 @@
-'use client';
+'use client'
 
-import { Calendar } from '@/components/ui/calendar';
-import { useToast } from '@/hooks/use-toast';
-import { generateDisabledDates, generateDateRange, defaultSelected, generateBlockedPeriods } from '@/utils/calendar';
-import { useProperty } from '@/utils/store';
-import { useEffect, useState } from 'react';
-import { DateRange } from 'react-day-picker';
-
+import { Calendar } from '@/components/ui/calendar'
+import { useToast } from '@/hooks/use-toast'
+import { generateDisabledDates, generateDateRange, defaultSelected, generateBlockedPeriods } from '@/utils/calendar'
+import { useProperty } from '@/utils/store'
+import { useEffect, useState } from 'react'
+import { DateRange } from 'react-day-picker'
 
 function BookingCalendar() {
   const currentDate = new Date()
@@ -22,7 +21,8 @@ function BookingCalendar() {
 
   useEffect(() => {
     const selectedRange = generateDateRange(range) // 날짜 범위를 배열로 변환
-    const isDisabledDateIncluded = selectedRange.some((date) => {
+
+    selectedRange.some((date) => {
       if (unavailableDates[date]) {
         setRange(defaultSelected) // 다시 선택하게 초기화
         toast({
