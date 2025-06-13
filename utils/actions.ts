@@ -9,6 +9,15 @@ import { auth, clerkClient, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
+/*
+ * 현재 로그인된 Clerk 유저의 userId 반환 (비로그인 시 null 반환)
+ */
+export async function getAuthUserId() {
+  const { userId } = auth()
+  console.log('getAuthUserId:', userId)
+  return userId
+}
+
 /**
  * 현재 로그인된 Clerk 유저 정보를 가져오고,
  * 프로필이 없으면 프로필 생성 페이지로 리디렉션하는 인증 유틸 함수

@@ -8,14 +8,17 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu'
+import { getAuthUserId } from '@/utils/actions'
 import { links } from '@/utils/links'
 import { SignedOut, SignedIn, SignInButton, SignUpButton } from '@clerk/nextjs'
-import { auth } from '@clerk/nextjs/server'
+// import { auth } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import { LuAlignLeft } from 'react-icons/lu'
 
-function LinksDropdown() {
-  const { userId } = auth()
+async function LinksDropdown() {
+  // const { userId } = auth()
+  const userId = await getAuthUserId()
+
   const isAdminUser = userId === process.env.ADMIN_USER_ID
 
   return (

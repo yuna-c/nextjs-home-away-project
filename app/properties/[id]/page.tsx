@@ -11,8 +11,8 @@ import UserInfo from '@/components/properties/UserInfo'
 import PropertyReviews from '@/components/reviews/PropertyReviews'
 import SubmitReview from '@/components/reviews/SubmitReview'
 import { Skeleton } from '@/components/ui/skeleton'
-import { fetchPropertyDetails, findExistingReview } from '@/utils/actions'
-import { auth } from '@clerk/nextjs/server'
+import { fetchPropertyDetails, findExistingReview, getAuthUserId } from '@/utils/actions'
+// import { auth } from '@clerk/nextjs/server'
 import { Separator } from '@radix-ui/react-dropdown-menu'
 import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
@@ -37,7 +37,8 @@ async function PropertyDetailsPage({ params }: { params: { id: string } }) {
   const firstName = property.profile.firstName
   const profileImage = property.profile.profileImage
 
-  const { userId } = auth()
+  // const { userId } = auth()
+  const userId = await getAuthUserId()
   const isNotOwner = property.profile.clerkId !== userId
   const reviewDoesNotExist = userId && isNotOwner && !(await findExistingReview(userId, property.id))
 
